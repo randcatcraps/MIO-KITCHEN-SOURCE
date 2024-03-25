@@ -32,10 +32,10 @@ class Extractor:
         return name.split('-')[0].split(' ')[0].split('+')[0].split('{')[0].split('(')[0]
 
     @staticmethod
-    def __append(msg, log):
+    def __append(msg, log, overwrite: bool = False):
         if not os.path.isfile(log) and not os.path.exists(log):
             open(log, 'tw', encoding='utf-8').close()
-        with open(log, 'a', newline='\n') as file:
+        with open(log, 'w' if overwrite else 'a', newline='\n') as file:
             print(msg, file=file)
 
     @staticmethod
@@ -193,7 +193,7 @@ class Extractor:
 
         if not os.path.isdir(self.CONFIG_DIR):
             os.makedirs(self.CONFIG_DIR)
-        self.__append(os.path.getsize(self.OUTPUT_IMAGE_FILE), self.CONFIG_DIR + os.sep + self.FileName + '_size.txt')
+        self.__append(os.path.getsize(self.OUTPUT_IMAGE_FILE), self.CONFIG_DIR + os.sep + self.FileName + '_size.txt', overwrite=True)
         with open(self.OUTPUT_IMAGE_FILE, 'rb') as file:
             dir_r = self.FileName
             scan_dir(ext4.Volume(file).root)
